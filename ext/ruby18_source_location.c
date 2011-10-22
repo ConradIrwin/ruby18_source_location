@@ -78,7 +78,13 @@ static VALUE
 source_pair(const char *filename, int lineno)
 {
     VALUE array = rb_ary_new();
-    rb_ary_push(array, rb_str_new2(filename));
+    VALUE str = rb_str_new2(filename);
+
+    // TODO: is there a better way of telling whether the file should be absolute
+    if (Qtrue == rb_funcall(rb_cFile, rb_intern("exist?"), 1, str))
+        rb_ary_push(array, rb_file_expand_path(str, Qnil));
+    else
+        rb_ary_push(array, str);
     rb_ary_push(array, INT2FIX(lineno));
 
     return array;
