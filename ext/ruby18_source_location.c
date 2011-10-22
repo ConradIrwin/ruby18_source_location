@@ -68,13 +68,18 @@ struct BLOCK {
     struct BLOCK *outer;
     struct BLOCK *prev;
 };
+#define RNODE(obj)  (R_CAST(RNode)(obj))
+#define NODE_LSHIFT (FL_USHIFT+8)
+#define NODE_LMASK  (((long)1<<(sizeof(NODE*)*CHAR_BIT-NODE_LSHIFT))-1)
+#define nd_line(n) ((unsigned int)(((RNODE(n))->flags>>NODE_LSHIFT)&NODE_LMASK))
+
 
 static VALUE
 source_pair(const char *filename, int lineno)
 {
     VALUE array = rb_ary_new();
-    rb_array_push(array, rb_str_new2(filename));
-    rb_array_push(array, INT2FIX(lineno));
+    rb_ary_push(array, rb_str_new2(filename));
+    rb_ary_push(array, INT2FIX(lineno));
 
     return array;
 }
