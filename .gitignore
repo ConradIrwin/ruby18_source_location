@@ -1,4 +1,5 @@
 *.gem
 *.so
 *.o
+.rvmrc
 ext/Makefile
